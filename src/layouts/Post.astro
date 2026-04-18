@@ -4,9 +4,11 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  prev: CollectionEntry<'blog'> | null;
+  next: CollectionEntry<'blog'> | null;
 }
 
-const { post } = Astro.props;
+const { post, prev, next } = Astro.props;
 const { title, description, date, tags } = post.data;
 
 const formatted = date.toLocaleDateString('en-CA', {
@@ -15,7 +17,12 @@ const formatted = date.toLocaleDateString('en-CA', {
   day: 'numeric',
 });
 ---
-<Base title={`${title} — aahmed.ca`} description={description}>
+<Base
+  title={`${title} — aahmed.ca`}
+  description={description}
+  ogType="article"
+  publishDate={date}
+>
   <article>
     <a href="/" class="back-link">← writing</a>
     <div class="post-header">
@@ -34,5 +41,26 @@ const formatted = date.toLocaleDateString('en-CA', {
     <div class="prose">
       <slot />
     </div>
+
+    {(prev || next) && (
+      <nav class="post-nav">
+        <div class="post-nav-item post-nav-prev">
+          {prev && (
+            <>
+              <span class="post-nav-label">← older</span>
+              <a href={`/blog/${prev.slug}`} class="post-nav-title">{prev.data.title}</a>
+            </>
+          )}
+        </div>
+        <div class="post-nav-item post-nav-next">
+          {next && (
+            <>
+              <span class="post-nav-label">newer →</span>
+              <a href={`/blog/${next.slug}`} class="post-nav-title">{next.data.title}</a>
+            </>
+          )}
+        </div>
+      </nav>
+    )}
   </article>
 </Base>
