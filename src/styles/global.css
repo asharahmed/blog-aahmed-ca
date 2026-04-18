@@ -81,7 +81,7 @@ a { color: inherit; text-decoration: none; }
 .site-nav a {
   font-size: 0.75rem;
   letter-spacing: 0.07em;
-  text-transform: uppercase;
+  text-transform: lowercase;
   font-weight: 500;
   color: var(--text-subtle);
   transition: color 0.15s;
@@ -127,7 +127,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: lowercase;
   color: var(--text-subtle);
   text-align: right;
   padding-top: 0.55rem;
@@ -194,7 +194,7 @@ a { color: inherit; text-decoration: none; }
   gap: 0.3em;
   font-size: 0.75rem;
   letter-spacing: 0.07em;
-  text-transform: uppercase;
+  text-transform: lowercase;
   font-weight: 500;
   color: var(--text-subtle);
   margin-bottom: clamp(2rem, 5vw, 3rem);
@@ -239,7 +239,7 @@ a { color: inherit; text-decoration: none; }
 .tag {
   font-size: 0.68rem;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-transform: lowercase;
   font-weight: 500;
   color: var(--text-subtle);
   border: 1px solid var(--border);
