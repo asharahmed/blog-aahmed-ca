@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths({ paginate }) {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return paginate(posts, { pageSize: 5 });
+}
+
+const { page } = Astro.props;
+
+const renderedPosts = await Promise.all(
+  page.data.map(async post => {
+    const { Content } = await post.render();
+    return { post, Content };
+  })
+);
+---
+<Base title={page.currentPage === 1 ? 'aahmed.ca' : `aahmed.ca — page ${page.currentPage}`}>
+  {renderedPosts.length === 0 ? (
+    <p class="empty">no posts yet.</p>
+  ) : (
+    <div class="post-stream">
+      {renderedPosts.map(({ post, Content }) => (
+        <article class="stream-post">
+          <h2 class="stream-post-title">
+            <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+          </h2>
+          <div class="stream-post-meta">
+            <time datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            {post.data.tags.length > 0 && (
+              <div class="post-tags">
+                {post.data.tags.map(tag => (
+                  <a href={`/tags/${tag}`} class="tag">{tag}</a>
+                ))}
+              </div>
+            )}
+          </div>
+          <div class="prose">
+            <Content />
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+  {(page.url.prev || page.url.next) && (
+    <nav class="pagination" aria-label="post navigation">
+      <span>
+        {page.url.prev && <a href={page.url.prev}>← newer</a>}
+      </span>
+      <span class="pagination-page">{page.currentPage} / {page.lastPage}</span>
+      <span>
+        {page.url.next && <a href={page.url.next}>older →</a>}
+      </span>
+    </nav>
+  )}
+</Base>
