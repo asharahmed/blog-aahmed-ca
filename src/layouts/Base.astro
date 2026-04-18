@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Software developer writing about code and ideas.' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <nav>
+          <a href="/" class="site-name">aahmed.ca</a>
+          <a href="/tags">tags</a>
+          <a href="/about">about</a>
+          <a href="/rss.xml">rss</a>
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer>
+        &copy; {new Date().getFullYear()} Ashar Ahmed
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  @import '../styles/global.css';
+</style>
