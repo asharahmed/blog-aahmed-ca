@@ -17,17 +17,35 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
+
+const byYear: Record<number, typeof posts> = {};
+for (const post of posts) {
+  const y = post.data.date.getFullYear();
+  (byYear[y] ??= []).push(post);
+}
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 ---
-<Base title={`#${tag} — aahmed.ca`}>
-  <h1 class="page-title">#{tag}</h1>
-  <ul class="post-list">
-    {posts.map(post => (
-      <li>
-        <span class="post-date">
-          {post.data.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })}
-        </span>
-        <a href={`/blog/${post.slug}`} class="post-title">{post.data.title}</a>
-      </li>
+<Base title={`${tag} — aahmed.ca`}>
+  <a href="/tags" class="back-link">← Tags</a>
+  <h1 class="page-title">{tag}</h1>
+  <div class="post-index">
+    {years.map(year => (
+      <div class="year-group">
+        <span class="year-label">{year}</span>
+        <ul class="year-posts">
+          {byYear[year].map(post => (
+            <li>
+              <span class="post-date">
+                {post.data.date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}
+              </span>
+              <a href={`/blog/${post.slug}`} class="post-link">
+                <span class="post-link-text">{post.data.title}</span>
+                <span class="post-link-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     ))}
-  </ul>
+  </div>
 </Base>

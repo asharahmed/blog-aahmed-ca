@@ -11,14 +11,15 @@ const { title, description, date, tags } = post.data;
 
 const formatted = date.toLocaleDateString('en-CA', {
   year: 'numeric',
-  month: 'short',
+  month: 'long',
   day: 'numeric',
 });
 ---
-<Base title={title} description={description}>
+<Base title={`${title} — aahmed.ca`} description={description}>
   <article>
+    <a href="/" class="back-link">← Writing</a>
     <div class="post-header">
-      <h1>{title}</h1>
+      <h1 class="post-h1">{title}</h1>
       <div class="post-meta">
         <time datetime={date.toISOString()}>{formatted}</time>
         {tags.length > 0 && (

@@ -4,17 +4,37 @@ import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const byYear: Record<number, typeof posts> = {};
+for (const post of posts) {
+  const y = post.data.date.getFullYear();
+  (byYear[y] ??= []).push(post);
+}
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 ---
-<Base title="aahmed.ca — Blog">
-  <ul class="post-list">
-    {posts.map(post => (
-      <li>
-        <span class="post-date">
-          {post.data.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })}
-        </span>
-        <a href={`/blog/${post.slug}`} class="post-title">{post.data.title}</a>
-      </li>
-    ))}
-  </ul>
-  {posts.length === 0 && <p style="color: var(--text-subtle)">No posts yet.</p>}
+<Base title="aahmed.ca">
+  {posts.length === 0 ? (
+    <p class="empty">No posts yet.</p>
+  ) : (
+    <div class="post-index">
+      {years.map(year => (
+        <div class="year-group">
+          <span class="year-label">{year}</span>
+          <ul class="year-posts">
+            {byYear[year].map(post => (
+              <li>
+                <span class="post-date">
+                  {post.data.date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}
+                </span>
+                <a href={`/blog/${post.slug}`} class="post-link">
+                  <span class="post-link-text">{post.data.title}</span>
+                  <span class="post-link-arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )}
 </Base>

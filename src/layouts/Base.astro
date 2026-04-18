@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -17,27 +19,30 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..400&family=DM+Sans:ital,opsz,wght@0,9..40,300..500;1,9..40,300..400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
-      <header>
-        <nav>
-          <a href="/" class="site-name">aahmed.ca</a>
-          <a href="/tags">tags</a>
-          <a href="/about">about</a>
-          <a href="/rss.xml">rss</a>
+      <header class="site-header">
+        <a href="/" class="site-name">aahmed.ca</a>
+        <nav class="site-nav">
+          <a href="/tags">Tags</a>
+          <a href="/about">About</a>
+          <a href="/rss.xml">RSS</a>
         </nav>
       </header>
       <main>
         <slot />
       </main>
-      <footer>
-        &copy; {new Date().getFullYear()} Ashar Ahmed
+      <footer class="site-footer">
+        <span>&copy; {new Date().getFullYear()} Ashar Ahmed</span>
+        <a href="/rss.xml">RSS Feed</a>
       </footer>
     </div>
   </body>
 </html>
-
-<style>
-  @import '../styles/global.css';
-</style>
